@@ -45,5 +45,10 @@ public class CarService {
         }
         return false;
     }
+
+    public Optional<Car> getCarById(Long id) {
+        return carRepository.findById(id);
+    }
+
 }
 
