@@ -1,7 +1,7 @@
 package com.zijad.autoprojekt.controller;
 
-import com.zijad.autoprojekt.dto.AuthResponse;
-import com.zijad.autoprojekt.dto.RegisterRequest;
+import com.zijad.autoprojekt.dto.auth.AuthResponse;
+import com.zijad.autoprojekt.dto.auth.RegisterRequest;
 import com.zijad.autoprojekt.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package com.zijad.autoprojekt.dto;
+package com.zijad.autoprojekt.dto.auth;
 
 public class AuthResponse {
 

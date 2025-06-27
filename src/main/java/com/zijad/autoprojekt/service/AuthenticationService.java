@@ -1,9 +1,9 @@
 package com.zijad.autoprojekt.service;
 
-import com.zijad.autoprojekt.dto.AuthResponse;
-import com.zijad.autoprojekt.dto.LoginRequest;
-import com.zijad.autoprojekt.dto.RegisterRequest;
-import com.zijad.autoprojekt.entity.User;
+import com.zijad.autoprojekt.dto.auth.AuthResponse;
+import com.zijad.autoprojekt.dto.auth.LoginRequest;
+import com.zijad.autoprojekt.dto.auth.RegisterRequest;
+import com.zijad.autoprojekt.model.User;
 import com.zijad.autoprojekt.repository.UserRepository;
 import com.zijad.autoprojekt.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,7 +1,7 @@
 package com.zijad.autoprojekt.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.zijad.autoprojekt.entity.User;
+import com.zijad.autoprojekt.model.User;
 
 import java.util.Optional;
 

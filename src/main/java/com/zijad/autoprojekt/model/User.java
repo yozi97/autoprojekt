@@ -1,4 +1,4 @@
-package com.zijad.autoprojekt.entity;
+package com.zijad.autoprojekt.model;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;

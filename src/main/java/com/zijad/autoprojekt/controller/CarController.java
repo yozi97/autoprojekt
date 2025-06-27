@@ -1,12 +1,15 @@
 package com.zijad.autoprojekt.controller;
 
+import com.zijad.autoprojekt.dto.car.CarRequest;
 import com.zijad.autoprojekt.model.Car;
 import com.zijad.autoprojekt.service.CarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,35 +23,38 @@ public class CarController {
         this.carService = carService;
     }
 
-    @GetMapping
-    public List<Car> getAllCars() {
-        return carService.getAllCars();
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Car> addCar(@RequestPart("data") CarRequest request,
+                                      @RequestPart(value = "image", required = false) MultipartFile image,
+                                      Principal principal) throws Exception {
+        Car car = carService.addCar(request, image, principal.getName());
+        return ResponseEntity.ok(car);
     }
 
-    @PostMapping()
-    public ResponseEntity<String> addCar(@Valid @RequestBody Car car) {
-        carService.addCar(car);
-        return ResponseEntity.ok("Car added");
+    @PostMapping("/json")
+    public ResponseEntity<Car> addCarJson(@RequestBody CarRequest request, Principal principal) throws Exception {
+        Car car = carService.addCar(request, null, principal.getName());
+        return ResponseEntity.ok(car);
     }
+
+    @GetMapping
+    public ResponseEntity<List<Car>> getAllCars() {
+
+        List<Car> cars = carService.getAllCars();
+        return ResponseEntity.ok(cars);
+    }
+
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCar(@PathVariable Long id, @Valid @RequestBody Car car) {
-        boolean updated = carService.updateCar(id, car);
-        if (updated) {
-            return ResponseEntity.ok("Car updated");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Car> updateCar(@PathVariable Long id, @Valid @RequestBody CarRequest request, Principal principal) {
+        Car updatedCar = carService.updateCar(id, request, principal.getName());
+        return ResponseEntity.ok(updatedCar);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCar(@PathVariable Long id) {
-        boolean deleted = carService.deleteCar(id);
-        if (deleted) {
-            return ResponseEntity.ok("Car deleted");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> deleteCar(@PathVariable Long id, Principal principal) {
+        carService.deleteCar(id, principal.getName());
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")

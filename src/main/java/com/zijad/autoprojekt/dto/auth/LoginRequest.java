@@ -1,6 +1,6 @@
-package com.zijad.autoprojekt.dto;
+package com.zijad.autoprojekt.dto.auth;
 
-public class RegisterRequest {
+public class LoginRequest {
 
     private String username;
     private String password;

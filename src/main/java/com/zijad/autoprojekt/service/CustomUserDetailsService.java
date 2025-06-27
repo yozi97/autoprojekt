@@ -1,6 +1,6 @@
 package com.zijad.autoprojekt.service;
 
-import com.zijad.autoprojekt.entity.User;
+import com.zijad.autoprojekt.model.User;
 import com.zijad.autoprojekt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
