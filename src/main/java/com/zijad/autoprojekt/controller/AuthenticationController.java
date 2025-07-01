@@ -1,6 +1,7 @@
 package com.zijad.autoprojekt.controller;
 
 import com.zijad.autoprojekt.dto.auth.AuthResponse;
+import com.zijad.autoprojekt.dto.auth.LoginRequest;
 import com.zijad.autoprojekt.dto.auth.RegisterRequest;
 import com.zijad.autoprojekt.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.register(request));
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authenticationService.login(request));
     }
 }
