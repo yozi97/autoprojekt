@@ -42,10 +42,10 @@ public class CarService {
         Car car = new Car();
         car.setBrand(request.getBrand());
         car.setModel(request.getModel());
-        car.setYear(request.getYear());
-        car.setPrice(request.getPrice());
+        car.setYear(request.getYear() != null ? request.getYear() : 0);
+        car.setPrice(request.getPrice() != null ? request.getPrice() : 0.0);
         car.setFuelType(request.getFuelType());
-        car.setMileage(request.getMileage());
+        car.setMileage(request.getMileage() != null ? request.getMileage() : 0);
         car.setDescription(request.getDescription());
         car.setUser(user);
 

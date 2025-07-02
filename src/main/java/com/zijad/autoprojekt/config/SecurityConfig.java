@@ -29,65 +29,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-//@Configuration
-//@RequiredArgsConstructor
-//@EnableMethodSecurity
-//public class SecurityConfig {
-//
-//    private final JwtService jwtService;
-//    private final UserDetailsService userDetailsService;
-//    private final JwtAuthFilter jwtAuthFilter;
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return new BCryptPasswordEncoder();
-//    }
-//
-////    @Bean
-////    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-////        UserDetails user = User.builder()
-////                .username("zijad")
-////                .password(encoder.encode("mySecretPass"))
-////                .roles("USER")
-////                .build();
-////
-////        return new InMemoryUserDetailsManager(user);
-////
-////    }
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(csrf -> csrf.disable())
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/auth/**").permitAll()  // otvoreni endpointi
-//                        .anyRequest().authenticated()                  // svi ostali zahtevaju auth
-//                )
-//                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authenticationProvider(authentificationProvider())
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .httpBasic(Customizer.withDefaults()); // omogućava Basic Auth
-//
-//        return http.build();
-//    }
-//
-//
-//    @Bean
-//    public AuthenticationProvider authentificationProvider() {
-//
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//
-//        provider.setUserDetailsService(userDetailsService);
-//        provider.setPasswordEncoder(passwordEncoder());
-//
-//        return provider;
-//    }
-//
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-//        return config.getAuthenticationManager();
-//    }
-//}
-
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
@@ -128,15 +69,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()   // login, registracija bez tokena
-                        .requestMatchers(HttpMethod.GET, "/api/cars/**").permitAll()  // GET može biti slobodan (ako želiš)
-                        .requestMatchers(HttpMethod.POST, "/api/cars/**").authenticated()  // POST zahtijeva token
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/cars/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/cars/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(Customizer.withDefaults());
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        // .httpBasic(Customizer.withDefaults());  // OVO UKLONI
 
         return http.build();
     }

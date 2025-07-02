@@ -21,10 +21,10 @@ public class Car {
     @NotBlank(message = "Model je obavezna!")
     private String model;
     @Min(value = 1900, message = "Godina mora biti najmanje 1900!")
-    private int year;
-    private double price;
+    private Integer year;
+    private Double price;
     private String fuelType;
-    private int mileage;
+    private Integer mileage = 0;
     private String description;
     private String imageUrl;
 

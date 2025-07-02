@@ -1,5 +1,6 @@
 package com.zijad.autoprojekt.dto.car;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +9,10 @@ import lombok.Setter;
 public class CarRequest {
     private String brand;
     private String model;
-    private int year;
-    private double price;
+    private Integer year;
+    private Double price;
     private String fuelType;
-    private int mileage;
+    private Integer mileage;
     private String description;
 
 }
