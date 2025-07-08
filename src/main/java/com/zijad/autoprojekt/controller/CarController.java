@@ -65,4 +65,10 @@ public class CarController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/api/my/cars")
+    public ResponseEntity<List<Car>> getMyCars() {
+        List<Car> myCars = carService.getMyCars();
+        return ResponseEntity.ok(myCars);
+    }
+
 }

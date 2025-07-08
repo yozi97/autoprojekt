@@ -30,7 +30,7 @@ public class AuthenticationService {
 
     public AuthResponse register(RegisterRequest request) {
         User user = new User();
-        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("ROLE_USER");
 
@@ -43,11 +43,11 @@ public class AuthenticationService {
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(), request.getPassword()
+                        request.getEmail(), request.getPassword()
                 )
         );
 
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
         String token = jwtService.generateToken(user);
 

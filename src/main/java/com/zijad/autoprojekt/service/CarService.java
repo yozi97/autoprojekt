@@ -6,6 +6,9 @@ import com.zijad.autoprojekt.model.User;
 import com.zijad.autoprojekt.repository.CarRepository;
 import com.zijad.autoprojekt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,8 +38,8 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public Car addCar(CarRequest request, MultipartFile image, String username) throws IOException {
-        User user = userRepository.findByUsername(username)
+    public Car addCar(CarRequest request, MultipartFile image, String email) throws IOException {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Car car = new Car();
@@ -89,6 +92,15 @@ public class CarService {
 
     public Optional<Car> getCarById(Long id) {
         return carRepository.findById(id);
+    }
+
+    public List<Car> getMyCars() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+
+        return carRepository.findByUser(user);
     }
 
 }
