@@ -40,9 +40,10 @@ public class CarService {
 
     public Car addCar(CarRequest request, MultipartFile image, String email) throws IOException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         Car car = new Car();
+        car.setUser(user);
         car.setBrand(request.getBrand());
         car.setModel(request.getModel());
         car.setYear(request.getYear() != null ? request.getYear() : 0);
@@ -65,7 +66,7 @@ public class CarService {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Car not found"));
 
-        if (!car.getUser().getUsername().equals(username)) {
+        if (!car.getUser().getEmail().equals(username)) {
             throw new RuntimeException("Access denied");
         }
 
@@ -103,5 +104,10 @@ public class CarService {
         return carRepository.findByUser(user);
     }
 
+    public List<Car> getCarsByUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return carRepository.findByUser(user);
+    }
 }
 

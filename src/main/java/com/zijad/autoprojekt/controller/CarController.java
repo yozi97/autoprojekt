@@ -40,10 +40,14 @@ public class CarController {
 
     @GetMapping
     public ResponseEntity<List<Car>> getAllCars() {
-
-        List<Car> cars = carService.getAllCars();
-        return ResponseEntity.ok(cars);
+        return ResponseEntity.ok(carService.getAllCars());
     }
+
+    @GetMapping("/mine")
+    public ResponseEntity<List<Car>> getMyCars(Principal principal) {
+        return ResponseEntity.ok(carService.getCarsByUser(principal.getName()));
+    }
+
 
 
     @PutMapping("/{id}")
