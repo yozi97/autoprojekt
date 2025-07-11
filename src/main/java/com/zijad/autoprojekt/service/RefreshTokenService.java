@@ -4,6 +4,7 @@ import com.zijad.autoprojekt.model.RefreshToken;
 import com.zijad.autoprojekt.model.User;
 import com.zijad.autoprojekt.repository.RefreshTokenRepository;
 import com.zijad.autoprojekt.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class RefreshTokenService {
 
     @Value("${jwt.refresh.expiration}")
@@ -30,6 +32,9 @@ public class RefreshTokenService {
     }
 
     public RefreshToken createRefreshToken(String email) {
+        // prvo izbriši postojeći token za tog korisnika (ako postoji)
+        deleteByUser(email);
+
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -40,6 +45,7 @@ public class RefreshTokenService {
 
         return refreshTokenRepository.save(refreshToken);
     }
+
 
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
@@ -53,6 +59,7 @@ public class RefreshTokenService {
         return token;
     }
 
+    @Transactional
     public void deleteByUser(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));

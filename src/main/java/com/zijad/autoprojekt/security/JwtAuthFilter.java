@@ -17,12 +17,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-public class JwtAuthFilter extends OncePerRequestFilter{
+public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthFilter(JwtService jwtService,@Lazy UserDetailsService userDetailsService) {
+    public JwtAuthFilter(JwtService jwtService, @Lazy UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
@@ -33,23 +33,34 @@ public class JwtAuthFilter extends OncePerRequestFilter{
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getServletPath();
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String username;
+
+        System.out.println("Request path: " + path);
         System.out.println("Authorization header: " + authHeader);
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (path.startsWith("/api/auth/")) {
+            System.out.println("Skipping auth path: " + path);
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("Missing or invalid Authorization header");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        final String jwt = authHeader.substring(7);
+        final String username = jwtService.extractUsername(jwt);
+
+        System.out.println("Extracted username from token: " + username);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtService.validateToken(jwt, userDetails)) {
+                System.out.println("Token valid, setting authentication to context");
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -58,9 +69,14 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                System.out.println("Token NOT valid");
             }
+        } else {
+            System.out.println("Username null or context already has authentication");
         }
 
         filterChain.doFilter(request, response);
     }
+
 }

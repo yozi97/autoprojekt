@@ -10,6 +10,9 @@ import com.zijad.autoprojekt.repository.UserRepository;
 import com.zijad.autoprojekt.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,18 +51,24 @@ public class AuthenticationService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(), request.getPassword()
                 )
         );
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String token = jwtService.generateToken(userDetails);
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
-        String token = jwtService.generateToken(user);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
 
         return new AuthResponse(token, refreshToken.getToken());
     }
+
+
 }

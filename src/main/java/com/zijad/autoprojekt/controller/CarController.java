@@ -75,4 +75,10 @@ public class CarController {
         return ResponseEntity.ok(myCars);
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Server radi");
+    }
+
+
 }

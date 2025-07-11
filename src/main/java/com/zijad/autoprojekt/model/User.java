@@ -3,6 +3,7 @@ package com.zijad.autoprojekt.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,8 +26,11 @@ public class User implements UserDetails {
     //private String role;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(name = "is_email_verified", nullable = false)
     private boolean isEmailVerified = false;
-    @Column(nullable = false, updatable = false)
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
 
