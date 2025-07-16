@@ -1,4 +1,4 @@
-package com.zijad.autoprojekt.service;
+package com.zijad.autoprojekt.security;
 
 import com.zijad.autoprojekt.model.User;
 import com.zijad.autoprojekt.repository.UserRepository;

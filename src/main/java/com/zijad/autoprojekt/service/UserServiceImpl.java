@@ -1,6 +1,6 @@
 package com.zijad.autoprojekt.service;
 
-import com.zijad.autoprojekt.dto.UserProfileResponse;
+import com.zijad.autoprojekt.dto.auth.UserProfileResponse;
 import com.zijad.autoprojekt.model.User;
 import com.zijad.autoprojekt.repository.CarRepository;
 import com.zijad.autoprojekt.repository.UserRepository;

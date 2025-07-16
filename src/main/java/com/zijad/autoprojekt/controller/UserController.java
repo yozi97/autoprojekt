@@ -1,6 +1,6 @@
 package com.zijad.autoprojekt.controller;
 
-import com.zijad.autoprojekt.dto.UserProfileResponse;
+import com.zijad.autoprojekt.dto.auth.UserProfileResponse;
 import com.zijad.autoprojekt.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,8 @@
 package com.zijad.autoprojekt.controller;
 
 import com.zijad.autoprojekt.model.RefreshToken;
-import com.zijad.autoprojekt.dto.LogoutRequest;
-import com.zijad.autoprojekt.dto.RefreshTokenRequest;
+import com.zijad.autoprojekt.dto.auth.LogoutRequest;
+import com.zijad.autoprojekt.dto.auth.RefreshTokenRequest;
 import com.zijad.autoprojekt.dto.auth.AuthResponse;
 import com.zijad.autoprojekt.dto.auth.LoginRequest;
 import com.zijad.autoprojekt.dto.auth.RegisterRequest;
