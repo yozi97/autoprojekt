@@ -23,7 +23,6 @@ public class CarService {
 
     private final CarRepository carRepository;
     private final UserRepository userRepository;
-
     private final String uploadDir = "uploads/";
 
 
