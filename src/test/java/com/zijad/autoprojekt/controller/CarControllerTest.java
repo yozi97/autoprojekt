@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -212,6 +214,86 @@ public class CarControllerTest {
                 .andExpect(jsonPath("$.mileage").value(25000))
                 .andExpect(jsonPath("$.description").value("Pouzdan i ekonomičan auto"))
                 .andExpect(jsonPath("$.imageUrl").value("/uploads/car.jpg"));
+    }
+
+    @Test
+    void testGetCarById() throws Exception {
+
+        Long carId = 1L;
+
+        Car car = new Car();
+        car.setId(carId);
+        car.setBrand("Audi");
+        car.setModel("A4");
+        car.setYear(2017);
+        car.setPrice(15000.0);
+        car.setFuelType("Diesel");
+        car.setMileage(95000);
+        car.setDescription("U odličnom stanju");
+
+        when(carService.getCarById(carId)).thenReturn(Optional.of(car));
+
+        mockMvc.perform(get("/api/cars/{id}", carId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(carId))
+                .andExpect(jsonPath("$.brand").value("Audi"))
+                .andExpect(jsonPath("$.model").value("A4"));
+    }
+
+    @Test
+    @WithMockUser(username = "testuser@example.com", roles = {"USER"})
+    void testUpdateCar() throws Exception {
+        Long carId = 1L;
+
+        CarRequest carRequest = new CarRequest();
+        carRequest.setBrand("BMW");
+        carRequest.setModel("320d");
+        carRequest.setYear(2018);
+        carRequest.setPrice(18500.0);
+        carRequest.setFuelType("Diesel");
+        carRequest.setMileage(80000);
+        carRequest.setDescription("Ažurirani opis");
+
+        Car updatedCar = new Car();
+        updatedCar.setId(carId);
+        updatedCar.setBrand("BMW");
+        updatedCar.setModel("320d");
+        updatedCar.setYear(2018);
+        updatedCar.setPrice(18500.0);
+        updatedCar.setFuelType("Diesel");
+        updatedCar.setMileage(80000);
+        updatedCar.setDescription("Ažurirani opis");
+
+        when(carService.updateCar(eq(carId), any(CarRequest.class), eq("testuser@example.com"))).thenReturn(updatedCar);
+
+        mockMvc.perform(put("/api/cars/{id}", carId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {
+                                "brand": "BMW",
+                                "model": "320d",
+                                "year": 2018,
+                                "price": 18500,
+                                "fuelType": "Diesel",
+                                "mileage": 80000,
+                                "description": "Ažurirani opis"
+                            }
+                            """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(carId))
+                .andExpect(jsonPath("$.brand").value("BMW"))
+                .andExpect(jsonPath("$.price").value(18500.0));
+    }
+
+    @Test
+    @WithMockUser(username = "testuser@example.com", roles = {"USER"})
+    void testDeleteCar() throws Exception {
+        Long carId = 1L;
+
+        mockMvc.perform(delete("/api/cars/{id}", carId))
+                .andExpect(status().isNoContent());
+
+        verify(carService, times(1)).deleteCar(carId, "testuser@example.com");
     }
 
 
